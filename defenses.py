@@ -66,19 +66,25 @@ class Defense:
             laplacian_decay = 2 / epsilon
             laplacian_constant = 2 / epsilon * (64 * np.log(2) + np.log(len(self.keywords)))
             map_kw_id_to_tag_and_volume = {}
-            ndocs_retrieved = 0
-            ndocs_real = 0
+            map_kw_id_to_true_volume = {}
             count = 0
             for kw_id in list(set([kw_id for weekly_kw_trace in kw_id_traces for kw_id in weekly_kw_trace])):
                 true_volume = len([doc_id for doc_id, doc_kws in enumerate(self.dataset) if self.keywords[kw_id] in doc_kws])
                 dp_volume = int(np.min((true_volume + np.ceil(np.random.laplace(laplacian_constant, laplacian_decay)), len(self.dataset))))
                 map_kw_id_to_tag_and_volume[kw_id] = (count, dp_volume)
+                map_kw_id_to_true_volume[kw_id] = true_volume
                 count += 1
-                ndocs_retrieved += dp_volume
-                ndocs_real += true_volume
 
-                # print("For '{:s}': {:d}->{:d}".format(self.keywords[kw_id], true_volume, dp_volume))
-            traces = [[map_kw_id_to_tag_and_volume[kw_id] for kw_id in weekly_trace] for weekly_trace in kw_id_traces]
+            ndocs_retrieved = 0
+            ndocs_real = 0
+            traces = []
+            for weekly_kw_trace in kw_id_traces:
+                weekly_tags_and_volumes = []
+                for kw_id in weekly_kw_trace:
+                    weekly_tags_and_volumes.append(map_kw_id_to_tag_and_volume[kw_id])
+                    ndocs_retrieved += map_kw_id_to_tag_and_volume[kw_id][1]
+                    ndocs_real += map_kw_id_to_true_volume[kw_id]
+                traces.append(weekly_tags_and_volumes)
 
             bw_overhead = ndocs_retrieved / ndocs_real
 
@@ -86,19 +92,25 @@ class Defense:
             x = self.def_params[0]
 
             map_kw_id_to_tag_and_volume = {}
-            ndocs_retrieved = 0
-            ndocs_real = 0
+            map_kw_id_to_true_volume = {}
             count = 0
             for kw_id in list(set([kw_id for weekly_kw_trace in kw_id_traces for kw_id in weekly_kw_trace])):
                 true_volume = len([doc_id for doc_id, doc_kws in enumerate(self.dataset) if self.keywords[kw_id] in doc_kws])
                 obf_volume = x ** int(np.ceil(np.log(true_volume) / np.log(x)))
                 map_kw_id_to_tag_and_volume[kw_id] = (count, obf_volume)
-                # print("{:d} -> {:d}".format(true_volume, obf_volume))
+                map_kw_id_to_true_volume[kw_id] = true_volume
                 count += 1
-                ndocs_retrieved += obf_volume
-                ndocs_real += true_volume
 
-            traces = [[map_kw_id_to_tag_and_volume[kw_id] for kw_id in weekly_trace] for weekly_trace in kw_id_traces]
+            ndocs_retrieved = 0
+            ndocs_real = 0
+            traces = []
+            for weekly_kw_trace in kw_id_traces:
+                weekly_tags_and_volumes = []
+                for kw_id in weekly_kw_trace:
+                    weekly_tags_and_volumes.append(map_kw_id_to_tag_and_volume[kw_id])
+                    ndocs_retrieved += map_kw_id_to_tag_and_volume[kw_id][1]
+                    ndocs_real += map_kw_id_to_true_volume[kw_id]
+                traces.append(weekly_tags_and_volumes)
 
             bw_overhead = ndocs_retrieved / ndocs_real
 
