@@ -1,10 +1,17 @@
 # README
-This document explains the basic structure of our code and the steps that need to be followed to reproduce our results.
+This repository contains the code that we used to generate the results in the paper:
+
+ S. Oya, F. Kerschbaum, *"Hiding the Access Pattern is Not Enough: Exploiting Search Pattern Leakage in Searchable Encryption"* (USENIX 2021)
+ 
+ This document explains the basic structure of our code and the steps that need to be followed to reproduce our results. If you have any questions about the code, you can email Simon Oya (simon.oya@uwaterloo.ca)
+ 
 Each realization of our experiments is initialized with a seed (from 0 to 29) so that running this code should generate **exactly** the plots in our paper
 (except for the running times). 
 
-We are working on getting a new version of our code with documented functions and classes, and a more thorough description of the code functionalities.
-Current docstrings in the code might refer to old versions of the functions/classes.
+TODO list:
+* Document functions and classes, fix current docstrings
+ 
+
 Note that the original code evaluated other attack variations, query distributions, and theoretical defenses. Many design decisions that were taken in the initial design of the code are suboptimal in this version.
 
 ## Summary of files
