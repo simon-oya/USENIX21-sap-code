@@ -1,4 +1,4 @@
-# README
+# Evaluation Code for: "Hiding the Access Pattern is Not Enough: Exploiting Search Pattern Leakage in Searchable Encryption"
 This repository contains the code that we used to generate the results in the paper:
 
  S. Oya, F. Kerschbaum, *"Hiding the Access Pattern is Not Enough: Exploiting Search Pattern Leakage in Searchable Encryption"* (USENIX 2021)
